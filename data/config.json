@@ -1,0 +1,10 @@
+{
+  "base_url": "https://example.com/",
+  "browser": "chrome",
+  "incognito": true,
+  "implicit_wait": 0,
+  "explicit_wait": 10,
+  "browser_arguments": [
+    "--lang=en-US"
+  ]
+}
