@@ -4,6 +4,7 @@ __all__ = [
     "Locator",
     "TextUtils",
     "Waiter",
+    "WindowActions",
     "xpath_literal",
 ]
 
@@ -33,6 +34,11 @@ def __getattr__(name: str):
         from framework.utils.waiter import Waiter
 
         return Waiter
+
+    if name == "WindowActions":
+        from framework.utils.window_actions import WindowActions
+
+        return WindowActions
 
     if name == "xpath_literal":
         from framework.utils.locator_utils import xpath_literal
