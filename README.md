@@ -34,6 +34,7 @@
 - явные ожидания через `Waiter`;
 - загрузка тестовых данных из JSON-файлов;
 - логирование в консоль и файл;
+- удобный helper для логирования шагов теста через `log(LogClass.INFO, "...")`;
 - smoke-тест для проверки, что основные модули фреймворка импортируются и конфигурация читается корректно.
 
 ## Требования
@@ -136,7 +137,10 @@ pytest -v
 │       └── waiter.py            # Явные ожидания
 ├── tests/
 │   ├── conftest.py              # Pytest-фикстуры
-│   └── test_framework_smoke.py  # Smoke-тест фреймворка
+│   ├── test_framework_smoke.py  # Smoke-тест фреймворка
+│   └── utils/
+│       ├── __init__.py
+│       └── logging_utils.py     # Helper для логирования шагов тестов
 ├── pytest.ini                   # Настройки pytest
 ├── requirements.txt             # Python-зависимости
 └── README.md
@@ -438,6 +442,33 @@ from framework.core.logger import get_logger
 
 logger = get_logger(__name__)
 logger.info("Test step was completed")
+```
+
+Для логирования шагов внутри тестов можно использовать helper из `tests.utils`.
+Он добавляет в сообщение файл и строку, откуда был вызван лог:
+
+```python
+from tests.utils import LogClass, log
+
+
+def test_example():
+    log(LogClass.INFO, "Test started: Smoke Framework")
+
+    assert True
+
+    log(LogClass.INFO, "Test finished: Smoke Framework")
+```
+
+Доступные уровни:
+
+- `LogClass.INFO`;
+- `LogClass.WARNING`;
+- `LogClass.ERROR`.
+
+Пример строки в логе:
+
+```text
+2026-04-28 15:45:00 | INFO     | tests | [test_framework_smoke.py:7] Test started: Smoke Framework
 ```
 
 ## Как расширять шаблон
