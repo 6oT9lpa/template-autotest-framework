@@ -25,7 +25,7 @@
 ## Возможности
 
 - запуск UI-тестов через `pytest`;
-- работа с браузерами `Chrome` и `Edge`;
+- работа с браузерами `Chrome`, `Edge` и `Firefox`;
 - централизованная настройка проекта через `data/config.json`;
 - единый объект браузера через `Browser`;
 - фабрики браузеров для удобного добавления новых драйверов;
@@ -40,7 +40,7 @@
 ## Требования
 
 - Python `3.10+`;
-- установленный браузер Google Chrome или Microsoft Edge;
+- установленный браузер Google Chrome, Microsoft Edge или Mozilla Firefox;
 - доступ в интернет при первом запуске, если Selenium Manager будет загружать подходящий драйвер автоматически;
 - Windows, Linux или macOS.
 
@@ -114,7 +114,12 @@ pytest -v
 ├── framework/
 │   ├── core/
 │   │   ├── browser.py           # Единая точка доступа к WebDriver
-│   │   ├── browser_factories.py # Фабрики браузеров Chrome/Edge
+│   │   ├── browser_factories/   # Фабрики браузеров Chrome/Edge/Firefox
+│   │   │   ├── browser_factory.py
+│   │   │   ├── chrome_driver_factory.py
+│   │   │   ├── driver_factory.py
+│   │   │   ├── edge_driver_factory.py
+│   │   │   └── firefox_driver_factory.py
 │   │   ├── logger.py            # Настройка логирования
 │   │   ├── log_messages.py      # Тексты лог-сообщений
 │   │   ├── settings.py          # Загрузка config.json и test_data.json
@@ -153,7 +158,7 @@ pytest -v
 | Поле | Тип | Описание |
 | --- | --- | --- |
 | `base_url` | `string` | Базовый адрес тестируемого приложения. |
-| `browser` | `string` | Браузер для запуска тестов. Сейчас поддерживаются `chrome` и `edge`. |
+| `browser` | `string` | Браузер для запуска тестов. Сейчас поддерживаются `chrome`, `edge` и `firefox`. |
 | `incognito` | `boolean` | Запуск браузера в приватном режиме. |
 | `implicit_wait` | `number` | Неявное ожидание Selenium. Рекомендуется оставлять `0` и использовать явные ожидания. |
 | `explicit_wait` | `number` | Таймаут явных ожиданий в секундах. Используется в `Waiter`. |
@@ -507,10 +512,10 @@ class Checkbox(BaseElement):
 
 ### Добавить новый браузер
 
-1. Создайте новый класс фабрики в `framework/core/browser_factories.py`.
+1. Создайте новый файл фабрики в `framework/core/browser_factories/`.
 2. Унаследуйте его от `DriverFactory`.
 3. Реализуйте метод `create`.
-4. Зарегистрируйте фабрику в `BrowserFactory._factories`.
+4. Зарегистрируйте фабрику в `BrowserFactory._factories` в `framework/core/browser_factories/browser_factory.py`.
 5. Укажите имя браузера в `data/config.json`.
 
 ### Добавить новые тестовые данные
@@ -543,6 +548,12 @@ class Checkbox(BaseElement):
 
 ```json
 "browser": "edge"
+```
+
+или:
+
+```json
+"browser": "firefox"
 ```
 
 ### Браузер не запускается
