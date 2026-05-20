@@ -115,79 +115,28 @@ pytest -v
 │   ├── core/
 │   │   ├── browser.py           # Единая точка доступа к WebDriver
 │   │   ├── browser_factories/   # Фабрики браузеров Chrome/Edge/Firefox
-│   │   │   ├── browser_factory.py
-│   │   │   ├── chrome_driver_factory.py
-│   │   │   ├── driver_factory.py
-│   │   │   ├── edge_driver_factory.py
-│   │   │   └── firefox_driver_factory.py
 │   │   ├── logger.py            # Настройка логирования
-│   │   ├── log_messages.py      # Тексты лог-сообщений
-│   │   ├── settings.py          # Загрузка config.json и test_data.json
+│   │   ├── settings.py          # Загрузка .json
 │   │   └── singleton.py         # Singleton metaclass
 │   ├── elements/
 │   │   ├── base_element.py      # Базовая обертка над Selenium WebElement
-│   │   ├── button.py            # Кнопки
-│   │   ├── input.py             # Поля ввода
-│   │   ├── text_element.py      # Текстовые элементы
+│   │   ├── button.py            # Элементы кнопок
+│   │   ├── input.py             # Элементы поля ввода
+│   │   ├── text.py              # Элементы текста
+│   │   ├── image.py             # Элементы картинок
 │   │   └── element_factory.py   # Фабрика элементов
 │   ├── models/
-│   │   └── config.py            # Dataclass-модели конфигурации
+│   │   ├── browser_config.py    # Модель конфигурации браузеров
+│   │   └── config.py            # Модель конфигурации
 │   ├── pages/
 │   │   └── base_page.py         # Базовый класс Page Object
 │   └── utils/
-│       ├── json_data_loader.py  # Чтение JSON-файлов из data/
-│       ├── js_actions.py        # JavaScript-действия
-│       ├── locator_utils.py     # Утилиты для локаторов
-│       ├── text_utils.py        # Нормализация и парсинг текста
-│       └── waiter.py            # Явные ожидания
 ├── tests/
 │   ├── conftest.py              # Pytest-фикстуры
 │   ├── test_framework_smoke.py  # Smoke-тест фреймворка
-│   └── utils/
-│       ├── __init__.py
-│       └── logging_utils.py     # Helper для логирования шагов тестов
 ├── pytest.ini                   # Настройки pytest
 ├── requirements.txt             # Python-зависимости
 └── README.md
-```
-
-## Конфигурация
-
-Основные настройки находятся в [data/config.json](data/config.json).
-
-| Поле | Тип | Описание |
-| --- | --- | --- |
-| `base_url` | `string` | Базовый адрес тестируемого приложения. |
-| `browser` | `string` | Браузер для запуска тестов. Сейчас поддерживаются `chrome`, `edge` и `firefox`. |
-| `incognito` | `boolean` | Запуск браузера в приватном режиме. |
-| `implicit_wait` | `number` | Неявное ожидание Selenium. Рекомендуется оставлять `0` и использовать явные ожидания. |
-| `explicit_wait` | `number` | Таймаут явных ожиданий в секундах. Используется в `Waiter`. |
-| `browser_arguments` | `array[string]` | Дополнительные аргументы браузера, например язык, размер окна или headless-режим. |
-| `logging` | `object` | Необязательный блок настроек логирования. Если блока нет, используются значения по умолчанию. |
-
-Пример расширенной конфигурации:
-
-```json
-{
-  "base_url": "https://example.com/",
-  "browser": "chrome",
-  "incognito": true,
-  "implicit_wait": 0,
-  "explicit_wait": 10,
-  "browser_arguments": [
-    "--lang=en-US",
-    "--window-size=1920,1080"
-  ],
-  "logging": {
-    "enabled": true,
-    "level": "INFO",
-    "console_enabled": true,
-    "file_enabled": true,
-    "file_path": "logs/framework.log",
-    "max_bytes": 1048576,
-    "backup_count": 5
-  }
-}
 ```
 
 Конфигурация читается через `ConfigManager`:

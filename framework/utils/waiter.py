@@ -7,7 +7,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from framework.core.browser import Browser
-from framework.core.log_messages import ErrorMessages, WarningMessages
 from framework.core.logger import get_logger
 from framework.core.settings import ConfigManager
 
@@ -20,9 +19,9 @@ class Waiter:
     def until(condition: Callable[[WebDriver], Any], timeout: int | None = None) -> Any:
         wait_timeout = timeout if timeout is not None else ConfigManager().config.explicit_wait
         try:
-            return WebDriverWait(Browser().driver, wait_timeout).until(condition)
+            return WebDriverWait(Browser().get_driver(), wait_timeout).until(condition)
         except TimeoutException:
-            logger.error(ErrorMessages.WAIT_TIMEOUT.format(timeout=wait_timeout))
+            logger.error("Timeout while waiting for condition: timeout=%s", wait_timeout)
             raise
 
     @staticmethod
@@ -33,7 +32,7 @@ class Waiter:
                     if element.is_displayed():
                         return element
             except StaleElementReferenceException:
-                logger.warning(WarningMessages.STALE_ELEMENT_DURING_WAIT.format(locator=locator))
+                logger.warning("Stale element while waiting for locator=%s", locator)
                 return False
             return False
 
@@ -47,7 +46,7 @@ class Waiter:
                     if element.is_displayed() and element.is_enabled():
                         return element
             except StaleElementReferenceException:
-                logger.warning(WarningMessages.STALE_ELEMENT_DURING_WAIT.format(locator=locator))
+                logger.warning("Stale element while waiting for locator=%s", locator)
                 return False
             return False
 
@@ -64,5 +63,5 @@ class Waiter:
             return True
         except TimeoutException:
             wait_timeout = timeout if timeout is not None else ConfigManager().config.explicit_wait
-            logger.error(ErrorMessages.ELEMENT_NOT_VISIBLE.format(locator=locator, timeout=wait_timeout))
+            logger.error("Element was not visible: locator=%s, timeout=%s", locator, wait_timeout)
             return False

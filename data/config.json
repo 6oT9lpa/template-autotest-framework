@@ -1,10 +1,6 @@
 {
-  "base_url": "https://example.com/",
-  "browser": "chrome",
-  "incognito": true,
+  "base_url": "https://demoqa.com/",
+  "browser": "firefox",
   "implicit_wait": 0,
-  "explicit_wait": 10,
-  "browser_arguments": [
-    "--lang=en-US"
-  ]
+  "explicit_wait": 10
 }

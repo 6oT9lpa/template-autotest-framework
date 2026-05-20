@@ -1,17 +1,17 @@
 from selenium import webdriver
-from selenium.webdriver import ChromeOptions
+from selenium.webdriver import FirefoxOptions
 from selenium.webdriver.remote.webdriver import WebDriver
 
-from framework.core.browser_factories.driver_factory import DriverFactory
+from framework.core.browser_factories.driver import DriverFactory
 from framework.models.config import Config
 
 
-class ChromeDriverFactory(DriverFactory):
-    INCOGNITO_ARGUMENT = "--incognito"
+class FirefoxDriverFactory(DriverFactory):
+    INCOGNITO_ARGUMENT = "-private"
 
     def create(self, config: Config) -> WebDriver:
-        options = ChromeOptions()
+        options = FirefoxOptions()
         if config.incognito:
             options.add_argument(self.INCOGNITO_ARGUMENT)
         self._add_browser_arguments(options, config)
-        return webdriver.Chrome(options=options)
+        return webdriver.Firefox(options=options)

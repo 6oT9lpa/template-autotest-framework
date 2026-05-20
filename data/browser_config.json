@@ -1,0 +1,35 @@
+{
+  "incognito": true,
+  "arguments": [
+    "--lang=en-US"
+  ],
+  "chromium": {
+    "experimental_options": {
+      "prefs": {
+        "download.default_directory": "{download_dir}",
+        "download.prompt_for_download": false,
+        "download.directory_upgrade": true,
+        "safebrowsing.enabled": true
+      }
+    },
+    "cdp_commands": [
+      {
+        "name": "Page.setDownloadBehavior",
+        "params": {
+          "behavior": "allow",
+          "downloadPath": "{download_dir}"
+        }
+      }
+    ]
+  },
+  "firefox": {
+    "preferences": {
+      "browser.download.folderList": 2,
+      "browser.download.dir": "{download_dir}",
+      "browser.download.useDownloadDir": true,
+      "browser.download.alwaysOpenPanel": false,
+      "browser.helperApps.neverAsk.saveToDisk": "application/octet-stream,application/pdf,image/jpeg,image/png,text/plain",
+      "pdfjs.disabled": true
+    }
+  }
+}
