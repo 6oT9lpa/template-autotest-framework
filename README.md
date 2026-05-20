@@ -10,7 +10,6 @@
 - [Требования](#требования)
 - [Быстрый старт](#быстрый-старт)
 - [Структура проекта](#структура-проекта)
-- [Конфигурация](#конфигурация)
 - [Запуск тестов](#запуск-тестов)
 - [Как писать тесты](#как-писать-тесты)
 - [Page Object](#page-object)
@@ -30,11 +29,10 @@
 - единый объект браузера через `Browser`;
 - фабрики браузеров для удобного добавления новых драйверов;
 - базовый Page Object слой;
-- обертки над Selenium-элементами: `Button`, `Input`, `TextElement`;
+- обертки над Selenium-элементами: `Button`, `Input`, `Text`, `Image`;
 - явные ожидания через `Waiter`;
 - загрузка тестовых данных из JSON-файлов;
 - логирование в консоль и файл;
-- удобный helper для логирования шагов теста через `log(LogClass.INFO, "...")`;
 - smoke-тест для проверки, что основные модули фреймворка импортируются и конфигурация читается корректно.
 
 ## Требования
@@ -59,7 +57,7 @@ Windows PowerShell:
 
 ```powershell
 python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+.venv\Scripts\Activate
 ```
 
 Linux/macOS:
@@ -81,14 +79,10 @@ pip install -r requirements.txt
 
 ```json
 {
-  "base_url": "https://example.com/",
-  "browser": "chrome",
-  "incognito": true,
+  "base_url": "https://demoqa.com/",
+  "browser": "firefox",
   "implicit_wait": 0,
-  "explicit_wait": 10,
-  "browser_arguments": [
-    "--lang=en-US"
-  ]
+  "explicit_wait": 10
 }
 ```
 
@@ -110,6 +104,7 @@ pytest -v
 .
 ├── data/
 │   ├── config.json              # Основная конфигурация фреймворка
+│   ├── browser_config.json      # Тонкая настройка браузеров
 │   └── test_data.json           # Тестовые данные
 ├── framework/
 │   ├── core/
@@ -387,37 +382,6 @@ email = test_data.get("user")["email"]
 - записываются в `logs/framework.log`;
 - ротируются при достижении размера `max_bytes`;
 - не попадают в git, потому что папка `logs/` добавлена в [.gitignore](.gitignore).
-
-Получить логгер в модуле:
-
-```python
-from framework.core.logger import get_logger
-
-
-logger = get_logger(__name__)
-logger.info("Test step was completed")
-```
-
-Для логирования шагов внутри тестов можно использовать helper из `tests.utils`.
-Он добавляет в сообщение файл и строку, откуда был вызван лог:
-
-```python
-from tests.utils import LogClass, log
-
-
-def test_example():
-    log(LogClass.INFO, "Test started: Smoke Framework")
-
-    assert True
-
-    log(LogClass.INFO, "Test finished: Smoke Framework")
-```
-
-Доступные уровни:
-
-- `LogClass.INFO`;
-- `LogClass.WARNING`;
-- `LogClass.ERROR`.
 
 Пример строки в логе:
 
